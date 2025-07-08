@@ -1,5 +1,11 @@
 package com.example.practice_movie_app_group_melissa_suganya_cole_lindsey.Model;
 
+import com.google.genai.Client;
+import com.google.genai.types.GenerateContentResponse;
+import org.apache.http.HttpException;
+
+import java.io.IOException;
+
 public class Movie {
     private String title;
     private String description;
@@ -10,9 +16,14 @@ public class Movie {
 
     public Movie(String title, String description, int rating) {
         this.title = title;
-        this.description = generateDescription(this.name);
+        try {
+            this.description = generateDescription(this.title);
+        } catch (HttpException | IOException e) {
+            throw new RuntimeException("Failed to generate description", e);
+        }
         this.rating = rating;
     }
+
 
     public String getTitle() {
         return title;
@@ -30,9 +41,9 @@ public class Movie {
         this.description = description;
     }
 
-    public String generateDescription(String name) throws HttpException, IOException {
+    public String generateDescription(String title) throws HttpException, IOException, HttpException, IOException {
         Client client = new Client();
-        String query = "Write a description for the movie" + this.name;
+        String query = "Write a description for the movie" + this.title;
         GenerateContentResponse response = client.models.generateContent("gemini-2.0-flash-001", query, null);
 
         return response.text();
