@@ -10,7 +10,7 @@ public class Movie {
 
     public Movie(String title, String description, int rating) {
         this.title = title;
-        this.description = description;
+        this.description = generateDescription(this.name);
         this.rating = rating;
     }
 
@@ -28,6 +28,14 @@ public class Movie {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String generateDescription(String name) throws HttpException, IOException {
+        Client client = new Client();
+        String query = "Write a description for the movie" + this.name;
+        GenerateContentResponse response = client.models.generateContent("gemini-2.0-flash-001", query, null);
+
+        return response.text();
     }
 
     public int getRating() {
