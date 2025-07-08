@@ -10,11 +10,22 @@ public class Movie {
     private String title;
     private String description;
     private int rating;
+    private String IMDBRating;
+
+    public String getIMDBRating() {
+        return IMDBRating;
+    }
+
+    public void setIMDBRating(String IMDBRating) {
+        this.IMDBRating = IMDBRating;
+    }
+
+
 
     public Movie() {
     }
 
-    public Movie(String title, String description, int rating) {
+    public Movie(String title, int rating) {
         this.title = title;
         try {
             this.description = generateDescription(this.title);
@@ -22,6 +33,13 @@ public class Movie {
             throw new RuntimeException("Failed to generate description", e);
         }
         this.rating = rating;
+
+        try {
+            this.IMDBRating = generateIMDBRating(this.title);
+        } catch (HttpException | IOException e) {
+            throw new RuntimeException("Failed to generate IMDB Rating", e);
+        }
+
     }
 
 
@@ -49,6 +67,17 @@ public class Movie {
         return response.text();
     }
 
+    public String generateIMDBRating(String title) throws HttpException, IOException, HttpException, IOException {
+        Client client = new Client();
+        String IMDBRating = "Please retrieve the IMDB rating for the movie "+ title;
+
+        GenerateContentResponse IMDBResponse = client.models.generateContent("gemini-2.0-flash-001", IMDBRating, null);
+
+        return IMDBResponse.text();
+    }
+
+
+
     public int getRating() {
         return rating;
     }
@@ -61,6 +90,7 @@ public class Movie {
     public String toString() {
         return "<strong>Title:</strong> " + title + "<br />" +
                 "<strong>Description:</strong> " + description + "<br />" +
-                "<strong>Rating:</strong> " + rating+ "<br />";
+                "<strong> Your Rating:</strong> " + rating+ "<strong> IMDB Rating:</strong>" + IMDBRating +"<br />" ;
+
     }
 }
