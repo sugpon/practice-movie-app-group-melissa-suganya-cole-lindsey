@@ -23,7 +23,7 @@ public class MovieController {
             <h2>Enter Movie Title& Rating</h2>
             <form action="/movie/generate" method="post">
                 Movie Name: <input type="text" name="title" required /> <br />
-                Rating(0(min)-5(max))<input type="text" name="rating" required /><br />
+                Rating(0(min)-10(max))<input type="text" name="rating" required /><br />
                 <button type="submit">Generate Description</button>
             </form>
             <hr/>
@@ -55,21 +55,20 @@ public class MovieController {
         //} catch (Exception e) {
         //  return "Error generating description: " + e.getMessage();
     }
-
-
-}
-
-// Show the list of all movies generated so far
-@GetMapping("/movie/list")
-public String listMovies() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("<html><body><h2>All Generated Movies</h2><ul>");
-    for (Movie movie : movies) {
-        sb.append("<li>").append(movie.toString()).append("</li>");
+    // Show the list of all movies generated so far
+    @GetMapping("/movie/list")
+    public String listMovies() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html><body><h2>All Generated Movies</h2><ul>");
+        for (Movie movie : movies) {
+            sb.append("<li>").append(movie.toString()).append("</li>");
+        }
+        sb.append("</ul><a href='/movie/form'>Generate new movie description</a></body></html>");
+        return sb.toString();
     }
-    sb.append("</ul><a href='/movie/form'>Generate new movie description</a></body></html>");
-    return sb.toString();
-}
 
 
 }
+
+
+
